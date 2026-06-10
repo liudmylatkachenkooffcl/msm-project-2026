@@ -1,0 +1,43 @@
+Project: mini social media
+
+Co nowego poznam: Flusk oraz struktura programu(tylko już samodzielnie a nie AI XDD)
+
+Co musi robić kod:
+1. Strona wstępna(np. "Qbi - świat możliwości (rejestracja)")
+2. Portal rejestracji - użytkownik wprowadza dane i wysyłane są w jsonie
+3. Serwer tworzy użytkownika, + dodajemy unikatowy ID. Nie dawaj
+   możliwości tworzenia podobnej nazwy i ID. Pilnuj bezpieczeństwa
+4. Przejście do strony głównej. Tutaj wyświetlamy randomowe posty(no, nie umiem w algorytmy social media)
+5. Tworzenie postu. PILNUJ BEZPIECZEŃSTWO!!!
+
+
+    My tree:
+
+    main.py - główny skrypt; uruchamia stronę oraz pliki.
+        routes.py - akcje strony #NIE ROOTS
+        db_utils - polecenia do socialbase
+    socialbase.db - baza danych
+    templates/
+        AI generated HTML files
+    static/
+        pliki css i js, czyli szablony, które będzie wykorzystywać strona(np. formularz rejestracji)
+
+
+Harmonogram(może ulec zmianom):
+0.)Create a repo
+I.) "db_utils":
+        registration
+        sign up
+        post creating
+        post recall(take user info and post info together)
+        post algorythm(random)
+        user recall
+        user class
+        post class
+        testy
+II.) "routes"
+        understanding how to do routing
+        defining all actions
+        writing code(write later)  
+III.) Generacja AI
+IV.) Main, czyli układanie wszystko w jeden kawał
