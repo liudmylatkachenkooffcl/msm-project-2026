@@ -41,3 +41,5 @@ II.) "routes"
         writing code(write later)  
 III.) Generacja AI
 IV.) Main, czyli układanie wszystko w jeden kawał
+
+for test branch(has to be deleted later)
