@@ -26,11 +26,11 @@ Co musi robić kod:
 Harmonogram(może ulec zmianom):
 0.)Create a repo
 I.) "db_utils":
-        registration
-        sign up
-        post creating
+        registration (jest)
+        sign up 
+        post creating (jest)
         post recall(take user info and post info together)
-        post algorythm(random)
+        post algorythm(random) 
         user recall
         user class
         post class
