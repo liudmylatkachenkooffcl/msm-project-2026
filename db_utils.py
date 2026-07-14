@@ -54,8 +54,42 @@ def recall_post(post_id):
     "INNER JOIN User ON Post.author_id = User.user_id WHERE Post.post_id = ?", (post_id,))
     to_front = cur.fetchone()
     return to_front
+
+def recall_post_chronologic(user_id):
+    cur.execute("SELECT Post.post_id, Post.text, Post.image," \
+    "Post.author_id, User.user_id, User.username, User.first_name, " \
+    "User.last_name, User.profile_pic FROM Post " \
+    "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ?" \
+    "ORDER BY Post.created DESC", (user_id,))
+    to_front = cur.fetchall()
+    return(to_front)
+
+def recall_feed(seen_post_id, limit=10):
+    if not seen_post_id:
+        cur.execute("SELECT Post.post_id, Post.text, Post.image," \
+        "Post.author_id, User.user_id, User.username, User.first_name, " \
+        "User.last_name, User.profile_pic FROM Post " \
+        "INNER JOIN User ON Post.author_id = User.user_id " \
+        "ORDERED BY RANDOM() LIMIT 20")
+        to_front = cur.fetchall()
+        return to_front
+    
+    else:
+        placeholders = ", ".join("?" for i in limit )
+        cur.execute(f"SELECT Post.post_id, Post.text, Post.image," \
+        "Post.author_id, User.user_id, User.username, User.first_name, " \
+        "User.last_name, User.profile_pic FROM Post " \
+        "INNER JOIN User ON Post.author_id = User.user_id " \
+        "WHERE Post.post_id NOT IN ({placeholders})" \
+        "ORDERED BY RANDOM() LIMIT ?", seen_post_id + [limit])
+        to_front = cur.fetchall()
+        return to_front
+    
+
+
 '''tipy na przyszłość: 1.) Pamiętaj o porządku statements: Select->Do smth.(np.join)->Sort and filter
 2.) Pamiętaj pakować zmienne do podstawienia w tuple(nawet pojedyńcze)
 3.) Wybieraj kiedy masz x = cur.fetchone albo fetchall(lista z tuplami)
 4.) Inner join - rekordy tylko z parami w tabeli 2
-    Left join - wyświetla wszystko z lewej tabeli, nawet jeżeli nie ma dopasowań z 2. Podobnie z Right Join '''
+    Left join - wyświetla wszystko z lewej tabeli, nawet jeżeli nie ma dopasowań z 2. Podobnie z Right Join 
+5.) Pisz wszystkie polecenia razem'''
