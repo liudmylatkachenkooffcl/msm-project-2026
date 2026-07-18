@@ -15,7 +15,8 @@ cur.execute('''
         profile_pic BLOB, 
         bio TEXT CHECK (length(bio) <= 400), 
         is_active BOOLEAN DEFAULT 1, 
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created DATETIME DEFAULT CURRENT_TIMESTAMP,
+        is_moderator BOOLEAN DEFAULT 0
     )
 ''') #all columns have their own line in this command
 
@@ -30,22 +31,23 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Post (
 ''')
 
 def register_user(username, email, password, first_name, last_name):
-    cur.execute("INSERT INTO USER (username, email, password, first_name, last_name) "
+    cur.execute("INSERT INTO User (username, email, password, first_name, last_name) "
                 "VALUES (?, ?, ?, ?, ?)", (username, email, password, first_name, last_name))
     conn.commit()
 
-def create_post(post_id, text, author_id, image):
-    cur.execute("INSERT INTO Post (post_id, text, author_id, image) "
-                "VALUES (?, ? , ? , ?)", (post_id, text, author_id, image))
+def create_post(text, author_id, image):
+    cur.execute("INSERT INTO Post (text, author_id, image) "
+                "VALUES (? , ? , ?)", (text, author_id, image))
     conn.commit()
 
-def edit_post(post_id, text, author_id, image):
-    cur.execute("UPDATE Post SET text = ?, image = ?", (text, image))
+def edit_post(post_id, text, image):
+    cur.execute("UPDATE Post SET text = ?, image = ? WHERE Post.post_id = ?", (text, image, post_id))
     conn.commit()
 
-def edit_user(username, email, first_name, last_name):
-    cur.execute("UPDATE Post SET username = ?, email = ?, first_name = ?, last_name = ?",
-                (username, email, first_name, last_name))
+def edit_user(user_id, username, email, first_name, last_name):
+    cur.execute("UPDATE User SET username = ?, email = ?, first_name = ?, last_name = ? WHERE User.user_id = ?",
+                (username, email, first_name, last_name, user_id))
+    conn.commit()
     
 def recall_post(post_id):
     cur.execute("SELECT Post.post_id, Post.text, Post.image," \
@@ -59,7 +61,7 @@ def recall_post_chronologic(user_id):
     cur.execute("SELECT Post.post_id, Post.text, Post.image," \
     "Post.author_id, User.user_id, User.username, User.first_name, " \
     "User.last_name, User.profile_pic FROM Post " \
-    "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ?" \
+    "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ? " \
     "ORDER BY Post.created DESC", (user_id,))
     to_front = cur.fetchall()
     return(to_front)
@@ -70,20 +72,27 @@ def recall_feed(seen_post_id, limit=10):
         "Post.author_id, User.user_id, User.username, User.first_name, " \
         "User.last_name, User.profile_pic FROM Post " \
         "INNER JOIN User ON Post.author_id = User.user_id " \
-        "ORDERED BY RANDOM() LIMIT 20")
+        "ORDER BY RANDOM() LIMIT ?", (limit,))
         to_front = cur.fetchall()
         return to_front
     
     else:
-        placeholders = ", ".join("?" for i in limit )
+        placeholders = ", ".join("?" for i in seen_post_id )
         cur.execute(f"SELECT Post.post_id, Post.text, Post.image," \
         "Post.author_id, User.user_id, User.username, User.first_name, " \
         "User.last_name, User.profile_pic FROM Post " \
         "INNER JOIN User ON Post.author_id = User.user_id " \
-        "WHERE Post.post_id NOT IN ({placeholders})" \
-        "ORDERED BY RANDOM() LIMIT ?", seen_post_id + [limit])
+        "WHERE Post.post_id NOT IN ({placeholders}) " \
+        "ORDER BY RANDOM() LIMIT ?", seen_post_id + [limit])
         to_front = cur.fetchall()
         return to_front
+    
+def recall_user(user_id):
+    cur.execute("SELECT User.user_id, User.username, User.first_name," \
+    " User.last_name, User.profile_pic, User.bio, User.created" \
+    " WHERE User.user_id = ?", (user_id,))
+    to_front = cur.fetchone()
+    return to_front
     
 
 
