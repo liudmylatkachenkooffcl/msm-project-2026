@@ -43,3 +43,9 @@ III.) Generacja AI
 IV.) Main, czyli układanie wszystko w jeden kawał
 
 for test branch(has to be deleted later)
+
+Ideas for further functions:
+1.) Daily login table like GitHub. Because it encourages me to go on this website.
+2.) To do the theme of site as WritingHub or something like that. Writers writes their posts, publics their manuscripts. Also they get that daily activities
+3.) Make theme as achievements. You could create your daily marks for different acticvities, to create groups or themes like on Reddit or smth. 
+4.) To make manual algorithm option. Like you choosing what to read or watch intentionally: you get some hashtags, themes and channels, so you form your fyp. Also there is an option for no algorithm or "light" algorithm(like lesser part of fyp is gonna be algorytmically chosen. Other part is gonna come from random reccomendations.
