@@ -1,19 +1,27 @@
 #loremipsum XDD
 import db_utils
-class user:
+import json
+class User:
     def __init__(self):
-        self.username = ""
+        self.username = None
         self.user_id = ""
-        self.username = ""
         self.email = ""
         self.password = ""
         self.first_name = ""
         self.last_name = ""
-        # self.profile_pic = '?'
+        self.profile_pic = None
         self.bio = ""
-        self.is_active = bool
-        # self.created = '?'
-        self.is_moderator = bool
+        self.is_active = True
+        self.created = None
+        self.is_moderator = False
 
-    def pack_in_json(): #welp, I'm gonna start with the hardest one XDD
-        pass
+    def pack_in_json(self): #welp, I'm gonna start with the hardest one XDD
+        json_dict = {
+            "user_id":self.user_id
+
+
+
+
+
+
+        }
