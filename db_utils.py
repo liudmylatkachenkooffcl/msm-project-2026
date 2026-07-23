@@ -34,6 +34,9 @@ def register_user(username, email, password, first_name, last_name):
     cur.execute("INSERT INTO User (username, email, password, first_name, last_name) "
                 "VALUES (?, ?, ?, ?, ?)", (username, email, password, first_name, last_name))
     conn.commit()
+    cur.execute("SELECT User.user_id WHERE User.email = ?", email)
+    user_id_raw = cur.fetchone()
+        return user_id_raw[0]
 
 def create_post(text, author_id, image):
     cur.execute("INSERT INTO Post (text, author_id, image) "
@@ -87,7 +90,7 @@ def recall_feed(seen_post_id, limit=10):
         to_front = cur.fetchall()
         return to_front
     
-def recall_user(user_id):
+def recall_user(user_id): #(id, username, fn, ln, pic, bio, created)
     cur.execute("SELECT User.user_id, User.username, User.first_name," \
     " User.last_name, User.profile_pic, User.bio, User.created" \
     " WHERE User.user_id = ?", (user_id,))
