@@ -46,5 +46,12 @@ class User:
         self.created = imported_data[6]
         #add maybe some message to console with "[SUCCESS]User [user_id] data was recalled successfully"
 
+    def __delete__(self): #needed for log out, deletion of user is else.
+        pass
+        #here must be console message "[SUCCESS] User [user_id] was logged out successfully.
 
+    def delete(self):
+        pass
+        #here must be new db function, that must delete users data from db.
+        #also, somehow I have to force the deletion of this object inside it, and I assume it is impossible.
 
