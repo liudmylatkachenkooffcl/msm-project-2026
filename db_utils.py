@@ -96,6 +96,8 @@ def recall_user(user_id): #(id, username, fn, ln, pic, bio, created)
     " WHERE User.user_id = ?", (user_id,))
     to_front = cur.fetchone()
     return to_front
+
+#później dopisz usunięcie użytkownika i posta.
     
 
 
