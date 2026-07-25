@@ -32,13 +32,21 @@ I.) "db_utils":
         post recall(take user info and post info together)
         post algorythm(random)
         user recall
-        user class
-        post class
+        user class - roots
+        post class - zmiana na roots
         testy
 II.) "routes"
+        old plan:
         understanding how to do routing
         defining all actions
-        writing code(write later)  
+        writing code(write later)
+        new plan:
+        so, I found a good video on youtube about doing project on flask. I'm just going to repeat that.
+        User class plan:
+            1. update data
+            2. pack in dict and json for sending
+            3. remember about private and public data.
+            4.
 III.) Generacja AI
 IV.) Main, czyli układanie wszystko w jeden kawał
 
