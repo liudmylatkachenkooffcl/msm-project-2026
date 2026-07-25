@@ -19,8 +19,8 @@ class User:
         self.created = None #datetime format
         self.is_moderator = False
 
-    def dict_not_secure(self): #Contains no password and email. Here is only publically avaiable data. Maybe I should remove is_actve
-        dict_not_secure = {
+    def dict_public(self): #Contains no password and email. Here is only publicly available data. Maybe I should remove is_active
+        dict_public = {
             "user_id":self.user_id,
             "username":self.username,
             "first_name":self.first_name,
@@ -31,8 +31,9 @@ class User:
             "created":self.created,
             "is_moderator":self.is_moderator
         }
+        return dict_public
 
-    def pack_in_json(pack_dict, self): #just dict to json, maybe used for every dict
+    def pack_in_json(pack_dict, self): #just dict to JSON, maybe used for every dict
         return json.dumps(pack_dict)
 
     def import_from_db_public(self, user_id): #we get everything besides email and password.
@@ -43,11 +44,7 @@ class User:
         self.profile_pic = imported_data[4]
         self.bio = imported_data[5]
         self.created = imported_data[6]
-        #add maybe some message to console with "[SUCESS]User [user_id] data was recalled sucessfully"
+        #add maybe some message to console with "[SUCCESS]User [user_id] data was recalled successfully"
 
 
 
-
-
-
-        }
