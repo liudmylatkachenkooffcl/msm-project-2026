@@ -65,6 +65,8 @@ class User:
 
     def update_public(self, new_info: dict = None): #new info must be dict
 
+
+
 class Post: #No public or private
     def __init__(self): #Every name of attr. is name of column in db(Post table)
         self.post_id = ""
