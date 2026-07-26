@@ -60,8 +60,5 @@ class User:
         self.is_moderator = False
         #message of logout in console
 
-    def delete(self):
-        pass
-        #here must be new db function, that must delete users data from db.
-        #also, somehow I have to force the deletion of this object inside it, and I assume it is impossible.
-
+    def import_from_db_private(self, user_id):
+        imported_data_private = db_utils.recall_user(user_id) #do private recall in db, but idk is it safe...
