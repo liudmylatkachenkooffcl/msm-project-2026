@@ -46,9 +46,19 @@ class User:
         self.created = imported_data[6]
         #add maybe some message to console with "[SUCCESS]User [user_id] data was recalled successfully"
 
-    def __delete__(self): #needed for log out, deletion of user is else.
-        pass
-        #here must be console message "[SUCCESS] User [user_id] was logged out successfully.
+    def log_out(self):
+        self.username = None
+        self.user_id = ""
+        self.email = ""
+        self.password = ""
+        self.first_name = ""
+        self.last_name = ""
+        self.profile_pic = ""  # is in link, we're taking it from folder from server
+        self.bio = ""
+        self.is_active = True
+        self.created = None  # datetime format
+        self.is_moderator = False
+        #message of logout in console
 
     def delete(self):
         pass
