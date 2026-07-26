@@ -97,7 +97,23 @@ def recall_user(user_id): #(id, username, fn, ln, pic, bio, created)
     to_front = cur.fetchone()
     return to_front
 
-#później dopisz usunięcie użytkownika i posta.
+def log_in(username, email, password):
+    if username != "":
+        cur.execute("SELECT User.user_id WHERE User.username = ? AND User.password = ?", (username, password))
+        user_id_raw = cur.fetchone()
+        return user_id_raw[0]
+    else:
+        cur.execute("SELECT User.user_id WHERE User.email = ? AND User.password = ?", (email, password))
+        user_id_raw = cur.fetchone()
+        return user_id_raw[0]
+
+def  delete_user(user_id, password):
+    cur.execute("DELETE FROM User WHERE User.user_id = ? AND User.password = ?", (user_id, password))
+    cur.commit()
+    cur.execute("DELETE FROM Post WHERE Post.author_id = ?", (user_id))
+    cur.commit()
+
+
     
 
 
