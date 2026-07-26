@@ -33,7 +33,7 @@ class User:
         }
         return dict_public
 
-    def pack_in_json(pack_dict, self): #just dict to JSON, maybe used for every dict
+    def pack_in_json(self, pack_dict): #just dict to JSON, maybe used for every dict
         return json.dumps(pack_dict)
 
     def import_from_db_public(self, user_id): #we get everything besides email and password.
