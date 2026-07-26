@@ -62,3 +62,42 @@ class User:
 
     def import_from_db_private(self, user_id):
         imported_data_private = db_utils.recall_user(user_id) #do private recall in db, but idk is it safe...
+
+    def update_public(self, new_info: dict = None): #new info must be dict
+
+class Post: #No public or private
+    def __init__(self): #Every name of attr. is name of column in db(Post table)
+        self.post_id = ""
+        self.text = ""
+        self.image = ""
+        self.author_id = None
+        self.created = None
+
+    def dict(self): #pack data into dict for further jsonization
+        dict_post = {
+            "post_id":self.post_id,
+            "text":self.text,
+            "author_id":self.author_id,
+            "created":self.created,
+            "image":self.image,
+        }
+        return dict_post
+
+    def pack_in_json(self, pack_dict): return json.dumps(pack_dict)
+
+    def import_from_db(self, post_id): #updating or getting data
+        imported_data = db_utils.recall_post(post_id)
+        self.post_id = imported_data[0]
+        self.text = imported_data[1]
+        self.author_id = imported_data[2]
+        self.created = imported_data[3]
+        self.image = imported_data[4]
+
+    def clear(self): #IT IS NOT DELETION, JUST CLEARING DATA
+        self.text = ""
+        self.author_id = ""
+        self.created = None
+        self.image = ""
+        self.post_id = ""
+        #console message
+
