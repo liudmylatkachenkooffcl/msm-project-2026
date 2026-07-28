@@ -103,3 +103,37 @@ class Post: #No public or private
         self.post_id = ""
         #console message
 
+app = Flask(__name__)
+
+@app.route('/')
+@app.route("/index")
+def index():
+    return render_template("index.html")
+    #here must be a "Qbi - the best ever!" "our values are" and other corporate bullshit
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+    #We send nothing but maybe answers... Yet I need to figure out how to send "wrong login or password" fast n' effective
+
+@app.route('/register')
+def register():
+    return render_template("register.html")
+    #we don't send anything special
+
+@app.route('/logout')
+def logout():
+    return render_template("logout.html")
+    #just "you've been logged out. Returning to homepage..." and timer thingy
+
+@app.route("feed")
+def feed():
+    return render_template("feed.html")
+
+user_return = None # temporary, just to ask LLM can I do such thingy with address, or I need to do it another way
+
+@app.route(f"profile{user_return}")
+def profile():
+    return render_template("profile.html")
+
+
