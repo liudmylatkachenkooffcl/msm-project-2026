@@ -111,10 +111,11 @@ def index():
     return render_template("index.html")
     #here must be a "Qbi - the best ever!" "our values are" and other corporate bullshit
 
-@app.route('/login')
+@app.route('/login', methods = "POST", "GET")
 def login():
     return render_template("login.html")
     #We send nothing but maybe answers... Yet I need to figure out how to send "wrong login or password" fast n' effective
+    #TIP:  GET - We send data to Front. POST - we save data on server.
 
 @app.route('/register')
 def register():
@@ -132,8 +133,8 @@ def feed():
 
 user_return = None # temporary, just to ask LLM can I do such thingy with address, or I need to do it another way
 
-@app.route(f"profile{user_return}")
-def profile():
+@app.route(f"profile/<username>")
+def profile(username):
     return render_template("profile.html")
 
 
