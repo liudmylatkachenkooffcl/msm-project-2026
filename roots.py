@@ -1,4 +1,6 @@
 #loremipsum XDD
+import flask
+
 import db_utils
 import json
 import datetime
@@ -64,7 +66,7 @@ class User:
         imported_data_private = db_utils.recall_user(user_id) #do private recall in db, but idk is it safe...
 
     def update_public(self, new_info: dict = None): #new info must be dict
-
+        pass
 
 
 class Post: #No public or private
@@ -111,14 +113,42 @@ def index():
     return render_template("index.html")
     #here must be a "Qbi - the best ever!" "our values are" and other corporate bullshit
 
-@app.route('/login', methods = "POST", "GET")
+@app.route('/login', methods = ["POST", "GET"])
 def login():
+    if request.method = "POST":
+        request_json_login = request.get_json(force = True)
+        login_data = json.loads(request_json_login)
+        username = login_data["username"]
+        password = login_data["password"]
+        email = login_data["email"]
+        user_id = db_utils.log_in(username, email, password)
+        if user_id is None:
+            flask.flash("Wrong login/email or password")
+            return render_template("login.html")
+        else:
+            cur_user = User()
+            cur_user.user_id = user_id
+            cur_user.update_public()
+            cur_user.password = password #should I replace it with private update? I don't want to do request to database too often.
+            cur_user.email = email
+            flask.redirect("/feed")
+            #I don't know: return /login or /feed?
     return render_template("login.html")
     #We send nothing but maybe answers... Yet I need to figure out how to send "wrong login or password" fast n' effective
     #TIP:  GET - We send data to Front. POST - we save data on server.
 
-@app.route('/register')
+@app.route('/register', methods = ["POST", "GET"])
 def register():
+    if request.method == "POST":
+        request_json_register = request.get_json(force = True)
+        register_data = json.loads(request_json_register)
+        #Do I need to enter data manually from json on server, or first put it on db, and do update?... For now I'll do it with db.
+        username = register_data["username"]
+        password = register_data["password"]
+        email = register_data["email"]
+        first_name = register_data["first_name"]
+        last_name = register_data["last_name"]
+        user_id = db_utils.register_user(username, email, password, first_name, last_name)
     return render_template("register.html")
     #we don't send anything special
 
