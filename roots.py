@@ -149,11 +149,20 @@ def register():
         first_name = register_data["first_name"]
         last_name = register_data["last_name"]
         user_id = db_utils.register_user(username, email, password, first_name, last_name)
+        cur_user = User()
+        cur_user.user_id = user_id
+        cur_user.update_public()
+        cur_user.password = password
+        cur_user.email = email
     return render_template("register.html")
     #we don't send anything special
 
-@app.route('/logout')
+@app.route('/logout', methods = ["POST"])
 def logout():
+    cur_user.logout()
+    request.session["user_id"] = None
+    request.
+
     return render_template("logout.html")
     #just "you've been logged out. Returning to homepage..." and timer thingy
 
