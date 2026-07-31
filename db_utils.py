@@ -101,11 +101,15 @@ def log_in(username, email, password):
     if username != "":
         cur.execute("SELECT User.user_id WHERE User.username = ? AND User.password = ?", (username, password))
         user_id_raw = cur.fetchone()
-        return user_id_raw[0]
     else:
         cur.execute("SELECT User.user_id WHERE User.email = ? AND User.password = ?", (email, password))
         user_id_raw = cur.fetchone()
-        return user_id_raw[0]
+
+        if user_id_raw is not None:
+            return user_id_raw[0]
+        else:
+            return None
+
 
 def  delete_user(user_id, password):
     cur.execute("DELETE FROM User WHERE User.user_id = ? AND User.password = ?", (user_id, password))
