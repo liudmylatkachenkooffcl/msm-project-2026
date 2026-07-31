@@ -117,6 +117,22 @@ def  delete_user(user_id, password):
     cur.execute("DELETE FROM Post WHERE Post.author_id = ?", (user_id))
     cur.commit()
 
+def check_user(username, email = ""):
+    answer = ""
+    if email != "":
+        cur.execute("SELECT user_id FROM User WHERE User.email = ?", (email, ))
+        output1 = cur.fetchone()
+        if output1 is not None:
+            answer = "email"
+            return answer
+
+    cur.execute("SELECT user_id FROM User WHERE User.username = ?", (username, ))
+    output2 = cur.fetchone()
+
+    if output2 is not None:
+        answer = "user"
+
+    return answer
 
     
 
