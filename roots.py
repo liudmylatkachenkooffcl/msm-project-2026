@@ -4,8 +4,7 @@ import flask
 import db_utils
 import json
 import datetime
-from flask import Flask, request
-import os
+from flask import Flask, session, redirect, url_for, render_template, request
 import uuid
 class User:
     def __init__(self):
@@ -105,6 +104,13 @@ class Post: #No public or private
         self.post_id = ""
         #console message
 
+
+
+#CZĘŚĆ Z FLASKIEM
+
+
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -115,12 +121,11 @@ def index():
 
 @app.route('/login', methods = ["POST", "GET"])
 def login():
-    if request.method = "POST":
-        request_json_login = request.get_json(force = True)
-        login_data = json.loads(request_json_login)
-        username = login_data["username"]
-        password = login_data["password"]
-        email = login_data["email"]
+    if request.method == "POST":
+        login_data = request.get_json(force = True)
+        username = login_data.get("username", "")
+        email = login_data.get("email", "")
+        # metoda.get jest bezpieczniejsza, ponieważ w przypadku braku danych nie wyrzuci KeyError
         user_id = db_utils.log_in(username, email, password)
         if user_id is None:
             flask.flash("Wrong login/email or password")
@@ -131,7 +136,7 @@ def login():
             cur_user.update_public()
             cur_user.password = password #should I replace it with private update? I don't want to do request to database too often.
             cur_user.email = email
-            flask.redirect("/feed")
+            return redirect(url_for("feed"))
             #I don't know: return /login or /feed?
     return render_template("login.html")
     #We send nothing but maybe answers... Yet I need to figure out how to send "wrong login or password" fast n' effective
@@ -140,8 +145,8 @@ def login():
 @app.route('/register', methods = ["POST", "GET"])
 def register():
     if request.method == "POST":
-        request_json_register = request.get_json(force = True)
-        register_data = json.loads(request_json_register)
+        register_data = request.get_json(force = True)
+        #get_json returns dictionary from the very beginning.
         #Do I need to enter data manually from json on server, or first put it on db, and do update?... For now I'll do it with db.
         username = register_data["username"]
         password = register_data["password"]
@@ -149,6 +154,11 @@ def register():
         first_name = register_data["first_name"]
         last_name = register_data["last_name"]
         user_id = db_utils.register_user(username, email, password, first_name, last_name)
+        if user_id:
+            return {"status": "success", "user_id": user_id}, 201
+        else:
+            return {"status": "fail", "user_id": user_id}, 400
+
         cur_user = User()
         cur_user.user_id = user_id
         cur_user.update_public()
@@ -160,10 +170,9 @@ def register():
 @app.route('/logout', methods = ["POST"])
 def logout():
     cur_user.logout()
-    request.session["user_id"] = None
-    request.
+    session.clear()
+    return redirect(url_for("index"))
 
-    return render_template("logout.html")
     #just "you've been logged out. Returning to homepage..." and timer thingy
 
 @app.route("feed")

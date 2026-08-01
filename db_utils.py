@@ -129,6 +129,7 @@ def check_user(username, email = ""):
     cur.execute("SELECT user_id FROM User WHERE User.username = ?", (username, ))
     output2 = cur.fetchone()
 
+
     if output2 is not None:
         answer = "user"
 

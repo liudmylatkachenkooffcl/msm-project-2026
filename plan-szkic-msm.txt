@@ -48,6 +48,7 @@ II.) "routes"
             3. remember about private and public data.
             4.
 III.) Generacja AI
+WAŻNE: wskaż ajajce, że musi być w JavaScripcie Frontend. Bo robię system pod wysyłanie JSONów, a nie form itd.
 IV.) Main, czyli układanie wszystko w jeden kawał
 
 for test branch(has to be deleted later)
