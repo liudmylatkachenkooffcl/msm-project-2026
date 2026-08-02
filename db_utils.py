@@ -69,7 +69,7 @@ def recall_post_chronologic(user_id):
     to_front = cur.fetchall()
     return(to_front)
 
-def recall_feed(seen_post_id, limit=10):
+def recall_feed(seen_post_id, limit=20): #we get list of tuples
     if not seen_post_id:
         cur.execute("SELECT Post.post_id, Post.text, Post.image," \
         "Post.author_id, User.user_id, User.username, User.first_name, " \
