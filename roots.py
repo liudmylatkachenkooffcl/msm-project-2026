@@ -1,6 +1,6 @@
 #loremipsum XDD
 import flask
-
+from functools import wraps
 import db_utils
 import json
 import datetime
@@ -108,8 +108,17 @@ class Post: #No public or private
 
 #CZĘŚĆ Z FLASKIEM
 
-
-
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id = session.get('user_id')
+        try:
+            if cur_user.user_id is None:
+            flash("To see this page please log in.", "error")
+            return redirect(url_for('login'))
+        except NameError:
+            cur_user = User()
+            cur_user.import_from_db_public(user_id)
 
 app = Flask(__name__)
 
@@ -168,8 +177,11 @@ def register():
     #we don't send anything special
 
 @app.route('/logout', methods = ["POST"])
-def logout():
-    cur_user.logout()
+def logout(cur_user):
+    try:
+        del cur_user
+    except NameError:
+        pass
     session.clear()
     return redirect(url_for("index"))
 
