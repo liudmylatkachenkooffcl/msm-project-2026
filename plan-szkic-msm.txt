@@ -46,12 +46,27 @@ II.) "routes"
             1. update data
             2. pack in dict and json for sending
             3. remember about private and public data.
-            4.
+        Update 02.08.26
+        I overestimated my capabilities and difficulty of the project... So I have to build tree with branches description
+        to avoid further mistakes and misunderstanding.
+
+        TREE OF WEBSITE:
+        # $ = login needed. For lack of chaos with decorators.
+        / /index
+            - $feed #generating posts and saving ID in frontend to not repeat them. Randomised. Figure out folder with links for pics
+            - $profile/<username>  #single profile of user;
+                - profile/<username>/feed/(new/old) #feed with all posts in chronological order. Later make date search.
+            - login
+            - register
+            - $log out
+
+        also I should consult with AI about sessions and handling them. Because I don't know how to
+        handle front and back properly, so I won't have problems in future + if I will want to come back to this project later
+        I won't have tons of technical debt(even though I cannot avoid it fully)
+
 III.) Generacja AI
 WAŻNE: wskaż ajajce, że musi być w JavaScripcie Frontend. Bo robię system pod wysyłanie JSONów, a nie form itd.
 IV.) Main, czyli układanie wszystko w jeden kawał
-
-for test branch(has to be deleted later)
 
 Ideas for further functions:
 1.) Daily login table like GitHub. Because it encourages me to go on this website.
