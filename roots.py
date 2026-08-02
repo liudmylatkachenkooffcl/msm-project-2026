@@ -107,18 +107,23 @@ class Post: #No public or private
 
 
 #CZĘŚĆ Z FLASKIEM
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user_id = session.get('user_id')
-        try:
-            if cur_user.user_id is None:
-            flash("To see this page please log in.", "error")
+
+        if user_id is None:
+            flask.flash("To see this page please log in.", "error")
             return redirect(url_for('login'))
-        except NameError:
-            cur_user = User()
-            cur_user.import_from_db_public(user_id)
+
+        cur_user = User()
+        cur_user.import_from_db_public(user_id)
+
+        kwargs['cur_user'] = cur_user
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 app = Flask(__name__)
 
@@ -177,6 +182,7 @@ def register():
     #we don't send anything special
 
 @app.route('/logout', methods = ["POST"])
+@login_required
 def logout(cur_user):
     try:
         del cur_user
@@ -188,12 +194,15 @@ def logout(cur_user):
     #just "you've been logged out. Returning to homepage..." and timer thingy
 
 @app.route("feed")
+@login_required
 def feed():
+
     return render_template("feed.html")
 
 user_return = None # temporary, just to ask LLM can I do such thingy with address, or I need to do it another way
 
 @app.route(f"profile/<username>")
+@login_required
 def profile(username):
     return render_template("profile.html")
 
