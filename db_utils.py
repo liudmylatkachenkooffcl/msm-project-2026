@@ -73,7 +73,7 @@ def recall_feed(seen_post_id, limit=20): #we get list of tuples
     if not seen_post_id:
         cur.execute("SELECT Post.post_id, Post.text, Post.image," \
         "Post.author_id, User.user_id, User.username, User.first_name, " \
-        "User.last_name, User.profile_pic FROM Post " \
+        "User.last_name, User.profile_pic Post.created FROM Post, User " \
         "INNER JOIN User ON Post.author_id = User.user_id " \
         "ORDER BY RANDOM() LIMIT ?", (limit,))
         to_front = cur.fetchall()
@@ -83,7 +83,7 @@ def recall_feed(seen_post_id, limit=20): #we get list of tuples
         placeholders = ", ".join("?" for i in seen_post_id )
         cur.execute(f"SELECT Post.post_id, Post.text, Post.image," \
         "Post.author_id, User.user_id, User.username, User.first_name, " \
-        "User.last_name, User.profile_pic FROM Post " \
+        "User.last_name, User.profile_pic Post.created FROM Post, User " \
         "INNER JOIN User ON Post.author_id = User.user_id " \
         "WHERE Post.post_id NOT IN ({placeholders}) " \
         "ORDER BY RANDOM() LIMIT ?", seen_post_id + [limit])
