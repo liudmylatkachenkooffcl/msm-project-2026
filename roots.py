@@ -4,7 +4,7 @@ from functools import wraps
 import db_utils
 import json
 import datetime
-from flask import Flask, session, redirect, url_for, render_template, request
+from flask import Flask, session, redirect, url_for, render_template, request, Response
 import uuid
 class User:
     def __init__(self):
@@ -207,7 +207,33 @@ def feed():
 
     return render_template("feed.html",seen_ids=json.dumps(seen_ids), feed_posts=json.dumps(feed_posts))
 
-user_return = None # temporary, just to ask LLM can I do such thingy with address, or I need to do it another way
+@app.route("/api/more_posts", methods = ["GET", "POST"])
+def api_more_posts()
+    data = request.get_json() or {}
+    seen_ids = data.get('seen_ids', [])
+
+    more_posts = db_utils.recall_feed(seen_ids, 20)
+    for more_post in more_posts:
+        id = more_post[0]
+        seen_ids.append(id)
+
+    formatted_posts = []
+    for post in more_posts:
+        formatted_posts.append({
+            "post_id": post[0],
+            "text": post[1],
+            "image": post[2],
+            "author_id": post[3]
+            "username": post[4],
+            "first_name": post[5],
+            "last_name": post[6],
+            "profile_pic": post[7]
+        })
+    return Response(response = json.dumps({"posts":formatted_posts, "seen_ids":seen_ids}), mimetype="application/json", status=200)
+
+
+
+
 
 @app.route(f"profile/<username>")
 @login_required
