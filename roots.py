@@ -193,11 +193,19 @@ def logout(cur_user):
 
     #just "you've been logged out. Returning to homepage..." and timer thingy
 
-@app.route("feed")
+@app.route("/feed")
 @login_required
 def feed():
+    #what I should send on server: JSON with few dicts. Names of posts are gonna be their IDs.
 
-    return render_template("feed.html")
+    #request.form.get("seen_post_id") - otrzymujemy str.
+    feed_posts = db_utils.recall_feed([], 20)
+    seen_ids = []
+    for feed_post in feed_posts:
+        id = feed_post[0]
+        seen_ids.append(id)
+
+    return render_template("feed.html",seen_ids=json.dumps(seen_ids), feed_posts=json.dumps(feed_posts))
 
 user_return = None # temporary, just to ask LLM can I do such thingy with address, or I need to do it another way
 
