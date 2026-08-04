@@ -208,7 +208,7 @@ def feed():
     return render_template("feed.html",seen_ids=json.dumps(seen_ids), feed_posts=json.dumps(feed_posts))
 
 @app.route("/api/more_posts", methods = ["GET", "POST"])
-def api_more_posts()
+def api_more_posts():
     data = request.get_json() or {}
     seen_ids = data.get('seen_ids', [])
 
@@ -237,7 +237,36 @@ def api_more_posts()
 
 @app.route(f"profile/<username>")
 @login_required
+
 def profile(username):
-    return render_template("profile.html")
+    call_user = db_utils.recall_user(username)
+    user_dict = {
+        "id": call_user[0],
+        "username": call_user[1],
+        "first_name": call_user[2],
+        "last_name": call_user[3],
+        "profile_pic": call_user[4],
+        "bio" : call_user[5],
+        "created" : call_user[6]
+    }
+    call_posts = db_utils.recall_post_chronologic(user_dict.get("id"), 20, [])
+    for post in call_posts:
+        post_dict = {
+            "post_id": post[0],
+            "text": post[1],
+            "image": post[2],
+            "author_id": post[3],
+        }
+    return render_template("profile.html", user_posts = json.dumps(call_posts), user_data = json.dumps(user_dict))
+
+@app.route(f"/api/more_posts_chronologic/<user_id>")
+#Should I add login_required? Because possibly it can be abused.
+def api_more_posts_chronologic(user_id, seen_ids):
+    call_posts = db_utils.recall_post_chronologic(user_id, 20, seen_ids)
+    for post in call_posts:
+
+
+
+@app.route(f"/post/<post_id>")
 
 
