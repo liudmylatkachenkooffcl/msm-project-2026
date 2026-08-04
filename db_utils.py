@@ -90,10 +90,10 @@ def recall_feed(seen_post_id, limit=20): #we get list of tuples
         to_front = cur.fetchall()
         return to_front
     
-def recall_user(user_id): #(id, username, fn, ln, pic, bio, created)
-    cur.execute("SELECT User.user_id, User.username, User.first_name," \
+def recall_user(username): #(id, username, fn, ln, pic, bio, created)
+    cur.execute("SELECT User.username, User.first_name," \
     " User.last_name, User.profile_pic, User.bio, User.created" \
-    " WHERE User.user_id = ?", (user_id,))
+    " WHERE User.username = ?", (username,))
     to_front = cur.fetchone()
     return to_front
 
