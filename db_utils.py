@@ -60,12 +60,12 @@ def recall_post(post_id):
     to_front = cur.fetchone()
     return to_front
 
-def recall_post_chronologic(user_id):
+def recall_post_chronologic(user_id, limit = 20):
     cur.execute("SELECT Post.post_id, Post.text, Post.image," \
     "Post.author_id, User.user_id, User.username, User.first_name, " \
     "User.last_name, User.profile_pic FROM Post " \
     "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ? " \
-    "ORDER BY Post.created DESC", (user_id,))
+    "ORDER BY Post.created LIMIT ? DESC", (user_id, limit))
     to_front = cur.fetchall()
     return(to_front)
 
@@ -91,7 +91,7 @@ def recall_feed(seen_post_id, limit=20): #we get list of tuples
         return to_front
     
 def recall_user(username): #(id, username, fn, ln, pic, bio, created)
-    cur.execute("SELECT User.username, User.first_name," \
+    cur.execute("SELECT User.user_id, User.username, User.first_name," \
     " User.last_name, User.profile_pic, User.bio, User.created" \
     " WHERE User.username = ?", (username,))
     to_front = cur.fetchone()
