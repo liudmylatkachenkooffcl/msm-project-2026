@@ -60,13 +60,23 @@ def recall_post(post_id):
     to_front = cur.fetchone()
     return to_front
 
-def recall_post_chronologic(user_id, limit = 20):
-    cur.execute("SELECT Post.post_id, Post.text, Post.image," \
-    "Post.author_id, User.user_id, User.username, User.first_name, " \
-    "User.last_name, User.profile_pic FROM Post " \
-    "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ? " \
-    "ORDER BY Post.created LIMIT ? DESC", (user_id, limit))
-    to_front = cur.fetchall()
+def recall_post_chronologic(user_id, limit = 20, seen_post_id = list):
+    if seen_post_id == []:
+        cur.execute("SELECT Post.post_id, Post.text, Post.image," \
+        "Post.author_id, User.user_id, User.username, User.first_name, " \
+        "User.last_name, User.profile_pic FROM Post " \
+        "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ? " \
+        "ORDER BY Post.created LIMIT ? DESC", (user_id, limit))
+        to_front = cur.fetchall()
+    else:
+        placeholders = ", ".join("?" for i in seen_post_id )
+        cur.execute(f"SELECT Post.post_id, Post.text, Post.image," \
+        "Post.author_id, User.user_id, User.username, User.first_name, " \
+        "User.last_name, User.profile_pic FROM Post " \
+        "INNER JOIN User ON Post.author_id = User.user_id WHERE User.user_id = ? AND Post.post_id NOT IN {placeholders} " \
+        "ORDER BY Post.created LIMIT ? DESC", (user_id, limit))
+        to_front = cur.fetchall()
+
     return(to_front)
 
 def recall_feed(seen_post_id, limit=20): #we get list of tuples
@@ -79,7 +89,7 @@ def recall_feed(seen_post_id, limit=20): #we get list of tuples
         to_front = cur.fetchall()
         return to_front
     
-    else:
+    else: # PROBLEM WITH LIMIT,ASK AI WHAT TO DO
         placeholders = ", ".join("?" for i in seen_post_id )
         cur.execute(f"SELECT Post.post_id, Post.text, Post.image," \
         "Post.author_id, User.user_id, User.username, User.first_name, " \
